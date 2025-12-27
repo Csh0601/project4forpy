@@ -1,5 +1,7 @@
 # Django博客系统
 
+> **GitHub仓库**: https://github.com/Csh0601/project4forpy
+
 ## 项目简介
 
 基于Django 5.2开发的功能完整的博客系统，实现Python程序设计课程Project 4
