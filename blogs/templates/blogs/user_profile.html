@@ -1,0 +1,97 @@
+{% extends 'blogs/base.html' %}
+
+{% block title %}{{ profile_user.username }} 的主页 - 博客{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <!-- 用户信息卡片 -->
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <h2><i class="bi bi-person-circle"></i> {{ profile_user.username }}</h2>
+                <p class="text-muted">
+                    加入于 {{ profile_user.date_joined|date:"Y-m-d" }}
+                </p>
+                <div class="row text-center">
+                    <div class="col">
+                        <h4>{{ stats.post_count }}</h4>
+                        <small class="text-muted">文章</small>
+                    </div>
+                    <div class="col">
+                        <h4>{{ stats.liked_count }}</h4>
+                        <small class="text-muted">收藏</small>
+                    </div>
+                    <div class="col">
+                        <h4>{{ stats.comment_count }}</h4>
+                        <small class="text-muted">评论</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页 -->
+        <ul class="nav nav-tabs" id="profileTab" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#posts" type="button">
+                    <i class="bi bi-file-text"></i> TA的文章 ({{ user_posts.count }})
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#likes" type="button">
+                    <i class="bi bi-heart"></i> TA的收藏 ({{ liked_posts.count }})
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content py-3">
+            <!-- TA的文章 -->
+            <div class="tab-pane fade show active" id="posts">
+                {% if user_posts %}
+                {% for post in user_posts %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'blogs:post_detail' post.id %}" class="text-decoration-none">{{ post.title }}</a>
+                        </h5>
+                        <p class="card-text text-muted">
+                            <small>
+                                {{ post.date_added|date:"Y-m-d" }} |
+                                <i class="bi bi-eye"></i> {{ post.views }} |
+                                <i class="bi bi-heart"></i> {{ post.total_likes }} |
+                                <i class="bi bi-chat"></i> {{ post.comments.count }}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">暂无文章</p>
+                {% endif %}
+            </div>
+
+            <!-- TA的收藏 -->
+            <div class="tab-pane fade" id="likes">
+                {% if liked_posts %}
+                {% for post in liked_posts %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="{% url 'blogs:post_detail' post.id %}" class="text-decoration-none">{{ post.title }}</a>
+                        </h5>
+                        <p class="card-text text-muted">
+                            <small>
+                                作者: <a href="{% url 'blogs:user_profile' post.owner.username %}">{{ post.owner.username }}</a> |
+                                {{ post.date_added|date:"Y-m-d" }}
+                            </small>
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+                {% else %}
+                <p class="text-muted">暂无收藏</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

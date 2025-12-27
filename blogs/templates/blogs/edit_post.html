@@ -1,0 +1,40 @@
+{% extends 'blogs/base.html' %}
+
+{% block title %}编辑文章 - 博客{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h1>编辑文章</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_title" class="form-label">标题</label>
+                {{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label for="id_text" class="form-label">内容</label>
+                {{ form.text }}
+            </div>
+            <div class="mb-3">
+                <label for="id_image" class="form-label">封面图片</label>
+                {% if post.image %}
+                <div class="mb-2">
+                    <img src="{{ post.image.url }}" alt="当前封面" class="img-thumbnail" style="max-height: 150px;">
+                    <small class="text-muted d-block">当前封面图片</small>
+                </div>
+                {% endif %}
+                {{ form.image }}
+                <div class="form-text">上传新图片将替换原有封面</div>
+            </div>
+            <div class="mb-3">
+                <label for="id_tags_input" class="form-label">标签</label>
+                {{ form.tags_input }}
+                <div class="form-text">用逗号分隔多个标签</div>
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+            <a href="{% url 'blogs:post_detail' post.id %}" class="btn btn-secondary">取消</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
