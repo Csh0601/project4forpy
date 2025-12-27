@@ -1,0 +1,46 @@
+{% extends 'blogs/base.html' %}
+
+{% block title %}标签: {{ tag.name }} - 博客{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h1 class="mb-4">
+            <span class="badge bg-primary">{{ tag.name }}</span>
+            标签下的文章
+        </h1>
+        <p class="text-muted">共 {{ posts|length }} 篇文章</p>
+
+        {% if posts %}
+        {% for post in posts %}
+        <div class="card mb-3 post-card">
+            <div class="card-body">
+                <h5 class="card-title">
+                    <a href="{% url 'blogs:post_detail' post.id %}" class="text-decoration-none">
+                        {{ post.title }}
+                    </a>
+                </h5>
+                <p class="card-text text-muted">
+                    <small>
+                        <a href="{% url 'blogs:user_profile' post.owner.username %}">{{ post.owner.username }}</a> |
+                        {{ post.date_added|date:"Y-m-d" }} |
+                        <i class="bi bi-eye"></i> {{ post.views }} |
+                        <i class="bi bi-heart"></i> {{ post.total_likes }}
+                    </small>
+                </p>
+                <p class="card-text">{{ post.text|truncatechars:150 }}</p>
+
+                {% for t in post.tags.all %}
+                <a href="{% url 'blogs:tag_posts' t.name %}" class="badge bg-secondary tag-badge text-decoration-none">{{ t.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="alert alert-info">该标签下暂无文章。</div>
+        {% endif %}
+
+        <a href="{% url 'blogs:index' %}" class="btn btn-secondary">返回首页</a>
+    </div>
+</div>
+{% endblock %}

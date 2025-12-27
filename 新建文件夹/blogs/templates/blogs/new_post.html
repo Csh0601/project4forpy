@@ -1,0 +1,33 @@
+{% extends 'blogs/base.html' %}
+
+{% block title %}发布文章 - 博客{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <h1>发布新文章</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="id_title" class="form-label">标题</label>
+                {{ form.title }}
+            </div>
+            <div class="mb-3">
+                <label for="id_text" class="form-label">内容</label>
+                {{ form.text }}
+            </div>
+            <div class="mb-3">
+                <label for="id_image" class="form-label">封面图片（可选）</label>
+                {{ form.image }}
+            </div>
+            <div class="mb-3">
+                <label for="id_tags_input" class="form-label">标签</label>
+                {{ form.tags_input }}
+                <div class="form-text">用逗号分隔多个标签</div>
+            </div>
+            <button type="submit" class="btn btn-primary">发布</button>
+            <a href="{% url 'blogs:index' %}" class="btn btn-secondary">取消</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
